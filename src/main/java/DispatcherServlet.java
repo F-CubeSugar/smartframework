@@ -1,4 +1,3 @@
-import com.sun.org.apache.bcel.internal.classfile.Code;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,14 +8,14 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletConfig;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRegistration;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import bean.Data;
 import bean.Handler;
@@ -92,9 +91,7 @@ public class DispatcherServlet extends HttpServlet {
             Method actionMethod = handler.getActionMethod();
             Object result = ReflectionUtil.invokeMethod(controllerBean, actionMethod, param);
             //处理Action方法返回值
-            if (result instanceof View) {
-                //返回jsp页面
-                View view = (View) result;
+            if (result instanceof View view) {
                 String path = view.getPath();
                 if (StringUtils.isNotEmpty(path)) {
                     if (path.startsWith("/")) {
@@ -106,9 +103,7 @@ public class DispatcherServlet extends HttpServlet {
                         }
                         req.getRequestDispatcher(ConfigHelper.getAppJspPath() + path).forward(req, resp);
                     }
-                } else if (result instanceof Data) {
-                    //返回JSON数据
-                    Data data = (Data) result;
+                } else if (result instanceof Data data) {
                     Object model = data.getModel();
                     if (model != null) {
                         resp.setContentType("application/json");
